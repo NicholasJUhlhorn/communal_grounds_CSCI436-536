@@ -1,6 +1,9 @@
 # Nicholas J Uhlhorn
 # November 2025
 
+from extensions import db 
+from sqlalchemy import func
+
 class User(db.Model):
     __tablename__ = 'users'
     uid = db.Column(db.Integer, primary_key=True, autoincrement=True)

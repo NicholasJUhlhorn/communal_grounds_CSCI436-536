@@ -1,6 +1,9 @@
 # Nicholas J Uhlhorn
 # November 2025
 
+from extensions import db 
+from sqlalchemy import func
+
 class Reaction(db.Model):
     __tablename__ = 'reactions'
     rid = db.Column(db.Integer, primary_key=True, autoincrement=True)
