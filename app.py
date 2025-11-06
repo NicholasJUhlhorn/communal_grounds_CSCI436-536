@@ -4,7 +4,8 @@
 from flask import Flask
 import os
 from extensions import db
-from routes import main_bp
+from routes.routes import main_bp
+from routes.test_routes import test_bp
 
 DB_DIR  = os.path.join(os.getcwd(), 'db_data')
 DB_PATH = os.path.join(DB_DIR, 'database.db')
@@ -18,6 +19,7 @@ def create_app():
     db.init_app(app)
 
     app.register_blueprint(main_bp)
+    app.register_blueprint(test_bp)
 
     import models
 
