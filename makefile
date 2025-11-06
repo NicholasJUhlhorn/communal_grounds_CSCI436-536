@@ -19,6 +19,15 @@ run: stop
 	@echo "  Starting server on http://localhost:5000"
 	@echo "=========================================="
 
+	docker run -p 5000:5000 --name $(CONTAINER_NAME) $(IMAGE_NAME)
+	@echo "Server started successfully. Container ID: $$(docker ps -q -f name=$(CONTAINER_NAME))"
+	@echo "Use 'make stop' to shut it down."
+
+detatched: stop 
+	@echo "=========================================="
+	@echo "     Starting server (non-detatched)"
+	@echo "=========================================="
+
 	docker run -d -p 5000:5000 --name $(CONTAINER_NAME) $(IMAGE_NAME)
 	@echo "Server started successfully. Container ID: $$(docker ps -q -f name=$(CONTAINER_NAME))"
 	@echo "Use 'make stop' to shut it down."
