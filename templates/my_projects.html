@@ -14,10 +14,9 @@
     <a href="{{ url_for('profile_creation') }}" target="_self"> Profile </a>
     <a> - </a>
     <a href="{{ url_for('my_projects') }}" target="_self"> My Projects </a>
-    
     <hr>
     
-    <h2> Home </h2>
+    <h2> My Projects </h2>
     <li>
         <label> Project Placeholder</label>
         <br>
@@ -30,8 +29,9 @@
             <span> 50% </span>
         </div>
         <br>
-        <!--This button will eventually be used for requesting access to projets. Once accepted, it will show up in My Projects-->
-        <button> apply</button>
+        <a href="{{ url_for('project') }}">
+            <button> Visit</button>
+        </a>
     </li>
 </body>
 <style>
