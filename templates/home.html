@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title> Communal Grounds Home </title>
+</head>
+<body>
+    <!--This is the header that will be present in every page-->
+    <h1> Communal Grounds </h1>
+    <a href="{{ url_for('main.home') }}" target="_self">  Home </a>
+    <a> - </a>
+    <a href="{{ url_for('main.about') }}" target="_self"> About </a>
+    <a> - </a>
+    <a href="{{ url_for('main.profile_creation') }}" target="_self"> Profile </a>
+    <a> - </a>
+    <a href="{{ url_for('main.my_projects') }}" target="_self"> My Projects </a>
+    
+    <hr>
+    
+    <h2> Home </h2>
+    <li>
+        <label> Project Placeholder</label>
+        <br>
+        <img src="/images/WWU.jpg" width="100px">
+        <a> [insert description here]</a>
+        <br>
+        
+        <div class="progress">
+            <div class="progress__fill"></div>
+            <span> 50% </span>
+        </div>
+        <br>
+        <!--This button will eventually be used for requesting access to projets. Once accepted, it will show up in My Projects-->
+        <button> apply</button>
+    </li>
+</body>
+<style>
+    .progress {
+        width: 200px;
+        height: 20px;
+        background: #465344;
+    }
+
+    .progress__fill {
+        width: 50%;
+        height: 100%;
+        background: #50b144;
+    }
+</style>
+
+</html>

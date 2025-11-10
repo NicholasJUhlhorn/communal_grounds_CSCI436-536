@@ -7,7 +7,7 @@ SERVICE_NAME := web
 
 .PHONY: all build run logs stop clean help
 
-all: run
+all: build run
 
 build:
 	@echo "=========================================="
