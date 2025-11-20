@@ -1,20 +1,10 @@
 <!DOCTYPE html>
 
 <html>
-<head>
-    <title> Communal Grounds Home </title>
-</head>
+{% include 'blocks/head.html' %}
 <body>
     <!--This is the header that will be present in every page-->
-    <h1> Communal Grounds </h1>
-    <a href="{{ url_for('main.home') }}" target="_self">  Home </a>
-    <a> - </a>
-    <a href="{{ url_for('main.about') }}" target="_self"> About </a>
-    <a> - </a>
-    <a href="{{ url_for('main.profile_creation') }}" target="_self"> Profile </a>
-    <a> - </a>
-    <a href="{{ url_for('main.my_projects') }}" target="_self"> My Projects </a>
-    <hr>
+    {% include 'blocks/header.html' %}    
     
     <h2> My Projects </h2>
     <li>
@@ -33,6 +23,9 @@
             <button> Visit</button>
         </a>
     </li>
+
+    <!-- This is the footer that will be present in every page-->
+    {% include 'blocks/footer.html' %}    
 </body>
 <style>
     .progress {
