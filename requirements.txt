@@ -2,3 +2,4 @@
 # November 2025
 
 flask
+flask_sqlalchemy 

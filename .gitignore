@@ -1,0 +1,6 @@
+# Nicholas J Uhlhorn
+# November 2025
+
+# ignore local db data folder
+db_data
+

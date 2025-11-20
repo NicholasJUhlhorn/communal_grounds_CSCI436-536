@@ -1,51 +1,65 @@
 # Nicholas J Uhlhorn
 # November 2025
 
-IMAGE_NAME := flask-app-docker
-CONTAINER_NAME := flask-app-container
+# Define the service name from docker-compose.yaml
 
-.PHONY: all build run stop clean help
+SERVICE_NAME := web
+
+.PHONY: all build run logs stop clean help
 
 all: build run
 
 build:
 	@echo "=========================================="
-	@echo "  Building Docker image: $(IMAGE_NAME)"
+	@echo "  Building Docker Compose services..."
 	@echo "=========================================="
-	docker build -t $(IMAGE_NAME) .
+	# Use docker-compose build to build the image defined in docker-compose.yaml
+	docker-compose build
 
-run: stop
+run:
 	@echo "=========================================="
 	@echo "  Starting server on http://localhost:5000"
 	@echo "=========================================="
+	# 'docker-compose up' handles building, volume mapping, port mapping, and running
+	# It also correctly uses the SQLite volume mapping from docker-compose.yaml.
+	docker-compose up 
+	@echo "Server started successfully."
+	@echo "Use 'make logs' to view output or 'make stop' to shut it down."
 
-	docker run -d -p 5000:5000 --name $(CONTAINER_NAME) $(IMAGE_NAME)
-	@echo "Server started successfully. Container ID: $$(docker ps -q -f name=$(CONTAINER_NAME))"
-	@echo "Use 'make stop' to shut it down."
+# We'll use 'run' as the default detached start and remove the older 'detatched' target
+
+logs:
+	@echo "=========================================="
+	@echo "  Viewing logs for $(SERVICE_NAME)..."
+	@echo "=========================================="
+	docker-compose logs -f
 
 stop:
 	@echo "=========================================="
-	@echo "  Attempting to stop and remove container $(CONTAINER_NAME)..."
+	@echo "  Attempting to stop and remove service..."
 	@echo "=========================================="
-
-	-docker stop $(CONTAINER_NAME) 2> /dev/null || true
-	-docker rm $(CONTAINER_NAME) 2> /dev/null || true
+	# Use 'docker-compose down' to stop the service and remove the containers/networks
+	-docker-compose down 2> /dev/null || true
 	@echo "Container cleanup complete."
 
 clean: stop
 	@echo "=========================================="
-	@echo "  Removing Docker image $(IMAGE_NAME)..."
+	@echo "  Removing Docker images..."
 	@echo "=========================================="
-
-	-docker rmi $(IMAGE_NAME) 2> /dev/null || true
+	# Remove the images created by the compose file
+	-docker-compose rm -s -f -v 2> /dev/null || true
+	# Assuming your image tag is set by the compose file build context.
+	# A clean 'docker-compose down -v --rmi all' is generally safer, but keeping close to your original logic:
+	-docker rmi $(shell docker images -qf "label=com.docker.compose.project") 2> /dev/null || true
 	@echo "Image cleanup complete."
 
 help:
 	@echo "Usage: make <target>"
 	@echo ""
 	@echo "Available targets:"
-	@echo "  all     : Runs 'build' then 'run' (default)."
-	@echo "  build   : Builds the Docker image ($(IMAGE_NAME))."
-	@echo "  run     : Stops existing container, then runs the image and maps port 5000."
-	@echo "  stop    : Stops and removes the running container ($(CONTAINER_NAME))."
+	@echo "  all     : Runs 'run' (default), which starts the server detached."
+	@echo "  build   : Builds the Docker image."
+	@echo "  run     : Builds and starts the service in detached mode (-d)."
+	@echo "  logs    : Follows the logs of the running container."
+	@echo "  stop    : Stops and removes the container."
 	@echo "  clean   : Stops/removes the container and removes the Docker image."
