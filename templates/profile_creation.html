@@ -4,7 +4,28 @@
 {% include 'blocks/head.html' %}
 <body>
     <!--This is the header that will be present in every page-->
-    {% include 'blocks/header.html' %}    
+    {% include 'blocks/header.html' %}  
+
+    <h2> Login </h2>
+    <form action="{{ url_for('main.submit_login') }}" method="POST">
+        <div>
+            <label for="username">username</label>
+            <input name="username" type="text" id="username" required>
+        </div>
+
+        <br>
+
+        <div>
+            <label for="password">password</label>
+            <input name="password" type="text" id="password" required>
+        </div>
+
+        <br>
+
+        <div>
+            <input type="submit">
+        </div>
+    </form>
 
     <h2> Create Your Profile </h2>
     <form action="{{ url_for('main.submit_profile_creation') }}" method="POST">

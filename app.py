@@ -5,7 +5,7 @@ from flask import Flask, session
 import os
 from extensions import db
 from routes.routes import main_bp
-from routes.test_routes import test_bp
+from routes.test_routes import test_bp, run_service_tests
 
 DB_DIR  = os.path.join(os.getcwd(), 'db_data')
 DB_PATH = os.path.join(DB_DIR, 'database.db')
@@ -31,5 +31,6 @@ if __name__ == '__main__':
     app = create_app()
     with app.app_context():
         db.create_all()
+        run_service_tests()
 
     app.run(host='0.0.0.0', port=5000)

@@ -46,11 +46,11 @@ def format_result_message(result):
     """Generates a useful string message based on the result type."""
     if isinstance(result, int):
         return f"Count: {result}"
-        
+
     if isinstance(result, list):
         if not result:
             return "List is empty (Count: 0)"
-        
+
         # Check if the list contains SQLAlchemy objects
         if isinstance(result[0], SQLA_MODELS):
             pk_name, pk_val = get_pk_info(result[0])
@@ -65,7 +65,7 @@ def format_result_message(result):
         # Detailed output for a single SQLAlchemy object
         pk_name, pk_val = get_pk_info(result)
         return f"Created/Retrieved {result.__class__.__name__}: ({pk_name}:{pk_val}) {str(result)}"
-    
+
     # Explicit check for None return
     if result is None:
         return "Function returned None (Check test status for error!)"
@@ -82,10 +82,10 @@ def run_service_tests():
     """
     # Use Flask's context manager to ensure DB operations are valid
     with current_app.app_context():
-        
+
         test_results = []
-        
-        # NOTE: We are removing 'result_type' from the dict as it's not displayed in the final HTML, 
+
+        # NOTE: We are removing 'result_type' from the dict as it's not displayed in the final HTML,
         # and instead focusing on making the 'result' field useful.
         def run_test(test_name, func, *args, **kwargs):
             """Helper function to run and record a single test."""
@@ -109,7 +109,7 @@ def run_service_tests():
                     'result_type': 'Exception' # Type for failed tests
                 })
                 # Critical failure flag to prevent subsequent operations using a broken object
-                return None 
+                return None
 
         # --- STEP 0: CLEANUP ---
         test_results.append({'name': 'SETUP: Clearing Database', 'status': 'INFO', 'result': 'Starting database cleanup.', 'result_type': 'Info'})
@@ -120,20 +120,20 @@ def run_service_tests():
         except Exception as e:
             test_results.append({'name': 'SETUP: DB Reset', 'status': 'FATAL ERROR', 'error': str(e), 'result_type': 'Exception'})
             return render_results(test_results)
-            
+
         # --- STEP 1: USER AND PROJECT CREATION ---
         test_results.append({'name': 'SECTION: User and Project CRUD', 'status': 'HEADER', 'result': 'Testing basic User and Project creation.', 'result_type': 'Header'})
-        
+
         # 1. Create Users
         # u1, u2, u3 will be None if the function call in run_test failed (i.e. raised an exception)
         alice_pw = "alice_password"
-        u1 = run_test('User: Create User (Alice)', user_service.create_new_user, 
+        u1 = run_test('User: Create User (Alice)', user_service.create_new_user,
                       email='alice@test.com', username='Alice', password_hash=generate_password_hash(alice_pw))
         bob_pw = "bob_password"
-        u2 = run_test('User: Create User (Bob)', user_service.create_new_user, 
+        u2 = run_test('User: Create User (Bob)', user_service.create_new_user,
                       email='bob@test.com', username='Bob', password_hash=generate_password_hash(bob_pw))
         charlie_pw = "charlie_password"
-        u3 = run_test('User: Create User (Charlie)', user_service.create_new_user, 
+        u3 = run_test('User: Create User (Charlie)', user_service.create_new_user,
                       email='charlie@test.com', username='Charlie', password_hash=generate_password_hash(charlie_pw))
 
         # --- CRITICAL CHECK: Fetch the users independently to get IDs/confirm commit status ---
@@ -141,27 +141,27 @@ def run_service_tests():
         alice = User.query.filter_by(username='Alice').first()
         bob = User.query.filter_by(username='Bob').first()
         charlie = User.query.filter_by(username='Charlie').first()
-        
+
         if not all([alice, bob, charlie]):
             test_results.append({
-                'name': 'SETUP: Critical User Fetch/UID Check', 
-                'status': 'FATAL ERROR', 
+                'name': 'SETUP: Critical User Fetch/UID Check',
+                'status': 'FATAL ERROR',
                 'error': f'Could not retrieve all test users after creation. Alice:{alice is not None}, Bob:{bob is not None}, Charlie:{charlie is not None}. Stopping. (Check creation step above for FAIL status and error message)',
                 'result_type': 'Failure Check'
             })
             return render_results(test_results)
-            
+
         # Optional: Add an explicit check that the objects have a UID now that they are fetched
         run_test('CHECK: Alice UID is available', lambda: alice.uid)
         run_test('CHECK: Bob UID is available', lambda: bob.uid)
 
 
         # 2. Create Projects
-        p1_result = run_test('Project: Create Project (Alice\'s)', project_service.create_new_project, 
+        p1_result = run_test('Project: Create Project (Alice\'s)', project_service.create_new_project,
                       owner_uid=alice.uid, name='Alice\'s Public Project', description='Public Project')
-        p2_result = run_test('Project: Create Project (Bob\'s)', project_service.create_new_project, 
+        p2_result = run_test('Project: Create Project (Bob\'s)', project_service.create_new_project,
                       owner_uid=bob.uid, name='Bob\'s Draft Project', description='Draft Project')
-                      
+
         alice_project = Project.query.filter_by(owner_uid=alice.uid).first()
 
         # 3. Read Operations
@@ -172,9 +172,9 @@ def run_service_tests():
         test_results.append({'name': 'SECTION: Project Membership Tests', 'status': 'HEADER', 'result': 'Testing ProjectMember creation and eager loading.', 'result_type': 'Header'})
 
         # 4. Add Member
-        run_test('Member: Bob joins Alice\'s Project (EDITOR)', project_service.add_project_member, 
+        run_test('Member: Bob joins Alice\'s Project (EDITOR)', project_service.add_project_member,
                  pid=alice_project.pid, uid=bob.uid, role='EDITOR')
-        
+
         # 5. Check Eager Load
         p_data = project_service.get_project_with_related_data(alice_project.pid)
         print(p_data.members, flush=True)
@@ -194,14 +194,14 @@ def run_service_tests():
         run_test('Reaction: Alice UPVOTES P1', reaction_service.add_reaction, alice_project.pid, alice.uid, 'UPVOTE')
         run_test('Reaction: Bob UPVOTES P1', reaction_service.add_reaction, alice_project.pid, bob.uid, 'UPVOTE')
         run_test('Reaction: Charlie LIKES P1', reaction_service.add_reaction, alice_project.pid, charlie.uid, 'LIKE')
-        
+
         # 7. Count Reactions
         run_test('Reaction: Count UPVOTES (Expected 2)', reaction_service.get_reaction_count_by_type, alice_project.pid, 'UPVOTE')
         run_test('Reaction: Count Total Reactions (Expected 3)', reaction_service.get_total_reactions, alice_project.pid)
 
         # 8. Update Reaction
         run_test('Reaction: Alice changes UPVOTE -> LIKE', reaction_service.add_reaction, alice_project.pid, alice.uid, 'LIKE')
-        
+
         # 9. Verify updated counts (Expected UPVOTES: 1, LIKES: 2, Total: 3)
         run_test('Reaction: Count UPVOTES (Expected 1)', reaction_service.get_reaction_count_by_type, alice_project.pid, 'UPVOTE')
         run_test('Reaction: Count LIKES (Expected 2)', reaction_service.get_reaction_count_by_type, alice_project.pid, 'LIKE')
@@ -212,10 +212,10 @@ def run_service_tests():
 
         # 10. Send Request (Alice -> Bob)
         run_test('Friend: Alice sends Bob request', user_service.send_friend_request, alice.uid, bob.uid)
-        
+
         # 11. Accept Request (Bob -> Alice)
         run_test('Friend: Bob accepts request', user_service.accept_friend_request, alice.uid, bob.uid)
-        
+
         # 12. Get Friends List
         friends = user_service.get_friends_list(alice.uid)
         friend_test_result = format_result_message(friends)
@@ -224,7 +224,7 @@ def run_service_tests():
             test_results.append({'name': 'VERIFY: Alice has Bob as friend', 'status': 'PASS', 'result': f"Friendship verified. {friend_test_result}", 'result_type': 'Verification'})
         else:
              test_results.append({'name': 'VERIFY: Alice has Bob as friend', 'status': 'FAIL', 'error': f'Friends list incorrect. Found: {friend_test_result}', 'result_type': 'Verification'})
-             
+
     # Render results to the user
     return render_results(test_results)
 
@@ -261,14 +261,14 @@ def render_results(results):
             </thead>
             <tbody>
     """
-    
+
     for result in results:
         status_class = result.get('status')
         name = result.get('name', 'N/A')
         # Use 'result' for PASS/INFO/HEADER, and 'error' for FAIL/FATAL
         message = result.get('result', result.get('error', 'No message'))
         result_type = result.get('result_type', '') # Fetch the new type
-        
+
         html += f"""
         <tr>
             <td>{name}</td>
@@ -277,7 +277,7 @@ def render_results(results):
             <td>{message}</td>
         </tr>
         """
-        
+
     html += """
             </tbody>
         </table>

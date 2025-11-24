@@ -7,22 +7,24 @@
     {% include 'blocks/header.html' %}    
     
     <h2> My Projects </h2>
+    {% for project in my_projects%}
     <li>
-        <label> Project Placeholder</label>
+        <label>{{project.name}}</label>
         <br>
         <img src="/images/WWU.jpg" width="100px">
-        <a> [insert description here]</a>
+        <a>{{project.description}}</a>
         <br>
         
         <div class="progress">
             <div class="progress__fill"></div>
-            <span> 50% </span>
+            <span>{{project.status}} </span>
         </div>
         <br>
         <a href="{{ url_for('main.project', pid = 'dummy') }}">
             <button> Visit</button>
         </a>
     </li>
+    {% endfor %}
 
     <!-- This is the footer that will be present in every page-->
     {% include 'blocks/footer.html' %}    

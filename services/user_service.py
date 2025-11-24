@@ -113,7 +113,6 @@ def find_user_with_username(username: str):
     If the User does not exist, returns null rather
     than raising an error.
     """
-
     user = db.session.execute(
         db.select(User).where(
             (User.username == username)

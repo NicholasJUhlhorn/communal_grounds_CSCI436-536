@@ -121,7 +121,7 @@ def handle_account_creation(form):
 def get_available_projects():
     '''
     Retrieves all PUBLISHED projects which the current user
-    is not already a part of 
+    is not already a part of
     '''
     ...
 
