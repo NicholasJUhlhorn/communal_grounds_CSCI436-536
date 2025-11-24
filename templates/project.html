@@ -6,15 +6,21 @@
     <!--This is the header that will be present in every page-->
     {% include 'blocks/header.html' %}    
 
-    <h1> Project Placeholder </h1>
+    <h1> {{project.name}} </h1>
     <img src="/images/WWU.jpg" width="500px" height="250px">
     <br>
-    <a> [insert description here]</a>
+    <a> {{project.description}}</a>
     <br>
     <div class="progress">
             <div class="progress__fill"></div>
-            <span> 50% </span>
+            <span> {{project.status}} </span>
     </div>
+    <h2>Members</h2>
+    {% for member in project.members %}
+        <li>
+            {{ member.member.username }} - {{ member.role }}
+        </li>
+    {% endfor %}
 
     <!-- This is the footer that will be present in every page-->
     {% include 'blocks/footer.html' %}    

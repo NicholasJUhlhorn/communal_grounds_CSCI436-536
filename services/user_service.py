@@ -26,7 +26,7 @@ def create_new_user(email: str, username: str, password_hash: str) -> User:
 
 def get_user_by_id(user_id: int) -> User:
     """Retrieves a user object by UID."""
-    user = db.session.get(User, user_id) 
+    user = db.session.get(User, user_id)
     if not user:
         raise ValueError(f"User with ID {user_id} not found.")
     return user
@@ -39,28 +39,28 @@ def get_all_users(limit: int = 100) -> list[User]:
 
 def get_friends_list(uid: int) -> list[User]:
     """
-    Returns a list of User objects who have 'ACCEPTED' the friend request 
+    Returns a list of User objects who have 'ACCEPTED' the friend request
     (either sent by or received by the current user).
     """
     # 1. Find all accepted friend requests involving the user
     accepted_requests = db.session.execute(
         db.select(FriendRequest.requestor_uid, FriendRequest.recipient_uid)
         .where(
-            (FriendRequest.status == 'ACCEPTED') & 
+            (FriendRequest.status == 'ACCEPTED') &
             ((FriendRequest.requestor_uid == uid) | (FriendRequest.recipient_uid == uid))
         )
     ).all()
-    
+
     # 2. Extract unique friend UIDs
     friend_uids = set()
     for req, rec in accepted_requests:
         # Add the UID that is NOT the current user's UID
         friend_uids.add(req if req != uid else rec)
-        
+
     # 3. Retrieve User objects for those UIDs
     if friend_uids:
         return db.session.execute(db.select(User).where(User.uid.in_(friend_uids))).scalars().all()
-    
+
     return []
 
 def send_friend_request(requestor_id: int, recipient_id: int) -> FriendRequest:
@@ -102,13 +102,17 @@ def accept_friend_request(requestor_id: int, recipient_id: int) -> FriendRequest
 
     if not request:
         raise ValueError("Pending friend request not found.")
-    
+
     request.status = 'ACCEPTED'
     db.session.commit()
     return request
 
 def find_user_with_username(username: str):
-    """Finds and returns the User with given username"""
+    """
+    Finds and returns the User with given username;
+    If the User does not exist, returns null rather
+    than raising an error.
+    """
 
     user = db.session.execute(
         db.select(User).where(
@@ -117,6 +121,6 @@ def find_user_with_username(username: str):
     ).scalar_one_or_none()
 
     if not user:
-        raise ValueError("User with given username not found")
+        return None
 
     return user
