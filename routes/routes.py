@@ -84,7 +84,3 @@ def submit_login():
 
     session['current_uid'] = uid
     return profile()
-
-@main_bp.route("/edit_profile")
-def edit_profile():
-    return render_template('edit_profile.html')
