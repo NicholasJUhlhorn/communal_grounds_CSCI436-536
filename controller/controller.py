@@ -2,7 +2,7 @@
 from services import project_service
 from services import reaction_service
 from services import user_service
-from werkzeug.security import generate_password_hash
+from werkzeug.security import generate_password_hash, check_password_hash
 from flask import session
 
 # DB FUNCTIONS FOR USER INTERACTIVITY
@@ -132,10 +132,9 @@ def handle_login(form):
     '''
     username = form.get("username")
     password = form.get("password")
-    user = user_service.find_user_with_username()
+    user = user_service.find_user_with_username(username)
     if not user:
         return None
-    hashed_password = generate_password_hash(password)
-    if user.hashed_password != hashed_password:
+    if not check_password_hash(user.hashed_password, password):
         return None
     return user.uid

@@ -8,6 +8,7 @@ from models.user import User
 from models.project import Project, ProjectMember
 from models.friend import FriendRequest
 from models.reaction import Reaction
+from werkzeug.security import generate_password_hash
 
 test_bp = Blueprint('test', __name__, url_prefix='/')
 
@@ -125,12 +126,15 @@ def run_service_tests():
         
         # 1. Create Users
         # u1, u2, u3 will be None if the function call in run_test failed (i.e. raised an exception)
+        alice_pw = "alice_password"
         u1 = run_test('User: Create User (Alice)', user_service.create_new_user, 
-                      email='alice@test.com', username='Alice', password_hash='hash123')
+                      email='alice@test.com', username='Alice', password_hash=generate_password_hash(alice_pw))
+        bob_pw = "bob_password"
         u2 = run_test('User: Create User (Bob)', user_service.create_new_user, 
-                      email='bob@test.com', username='Bob', password_hash='hash123')
+                      email='bob@test.com', username='Bob', password_hash=generate_password_hash(bob_pw))
+        charlie_pw = "alice_password"
         u3 = run_test('User: Create User (Charlie)', user_service.create_new_user, 
-                      email='charlie@test.com', username='Charlie', password_hash='hash123')
+                      email='charlie@test.com', username='Charlie', password_hash=generate_password_hash(charlie_pw))
 
         # --- CRITICAL CHECK: Fetch the users independently to get IDs/confirm commit status ---
         # The subsequent service functions rely on these UIDs, so we must be able to fetch them.
