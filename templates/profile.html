@@ -10,6 +10,20 @@
 
     <h3> Friends </h3>
 
+    {% for friend in friends_list %}
+        <li>
+            {{ friend.username }}
+        </li>
+    {% endfor %}
+
+    <form action="{{ url_for('main.profile') }}">
+        <button type="submit">Edit Profile</button>
+    </form>
+    
+    <form action="{{ url_for('main.signout') }}">
+        <button type="submit">Sign Out</button>
+    </form>
+
     <!-- This is the footer that will be present in every page-->
     {% include 'blocks/footer.html' %}    
 </body>

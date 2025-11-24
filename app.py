@@ -1,7 +1,7 @@
 # Nicholas J Uhlhorn
 # November 2025
 
-from flask import Flask
+from flask import Flask, session
 import os
 from extensions import db
 from routes.routes import main_bp
@@ -15,6 +15,7 @@ def create_app():
     basedir = os.path.abspath(os.path.dirname(__file__))
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + DB_PATH
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    app.secret_key = "dummy"  # TODO: make this more secure
 
     db.init_app(app)
 

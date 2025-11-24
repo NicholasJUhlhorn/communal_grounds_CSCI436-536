@@ -7,24 +7,24 @@
     {% include 'blocks/header.html' %}    
 
     <h2> Create Your Profile </h2>
-    <form action="{{ url_for('main.profile') }}">
+    <form action="{{ url_for('main.submit_profile_creation') }}" method="POST">
         <div>
             <label for="username">username</label>
-            <input type="text" id="username">
+            <input name="username" type="text" id="username" required>
         </div>
 
         <br>
 
         <div>
             <label for="email">email</label>
-            <input type="text" id="email">
+            <input name="email" type="text" id="email" required>
         </div>
 
         <br>
 
         <div>
             <label for="password">password</label>
-            <input type="text" id="password">
+            <input name="password" type="text" id="password" required>
         </div>
 
         <br>
