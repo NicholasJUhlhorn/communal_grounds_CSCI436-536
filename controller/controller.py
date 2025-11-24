@@ -59,20 +59,6 @@ def change_project_description(pid: int, new_description: str):
     db.session.commit()
     return proj
 
-def find_uid_with_username(username: str):
-    """Finds and returns the uid of User with given username"""
-
-    user = db.session.execute(
-        db.select(User).where(
-            (User.username == username)
-        )
-    ).scalar_one_or_none()
-
-    if not user:
-        raise ValueError("User with given username not found")
-    
-    return user.uid
-
 def change_project_status(pid: int, new_status: str):
     """Updates a project's status"""
 
@@ -138,3 +124,18 @@ def get_available_projects():
     is not already a part of 
     '''
     ...
+
+def handle_login(form):
+    '''
+    attempts to login user based on given form info. 
+    returns uid for user if successful, returns None if unsuccessful
+    '''
+    username = form.get("username")
+    password = form.get("password")
+    user = user_service.find_user_with_username()
+    if not user:
+        return None
+    hashed_password = generate_password_hash(password)
+    if user.hashed_password != hashed_password:
+        return None
+    return user.uid

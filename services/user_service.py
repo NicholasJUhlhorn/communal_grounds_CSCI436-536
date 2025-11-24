@@ -106,3 +106,17 @@ def accept_friend_request(requestor_id: int, recipient_id: int) -> FriendRequest
     request.status = 'ACCEPTED'
     db.session.commit()
     return request
+
+def find_user_with_username(username: str):
+    """Finds and returns the User with given username"""
+
+    user = db.session.execute(
+        db.select(User).where(
+            (User.username == username)
+        )
+    ).scalar_one_or_none()
+
+    if not user:
+        raise ValueError("User with given username not found")
+    
+    return user

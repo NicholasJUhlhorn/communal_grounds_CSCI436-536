@@ -45,3 +45,15 @@ def signout():
 @main_bp.route("/project/<pid>")
 def project(pid):
     return render_template('project.html')
+
+@main_bp.route("/edit_profile")
+def edit_profile():
+    return render_template('edit_profile.html')
+
+@main_bp.route("/submit_login", methods=['POST'])
+def submit_login():
+    uid = controller.handle_login(request.form)
+    if not uid:
+        return profile_creation()
+    session['current_uid'] = uid
+    return profile()
