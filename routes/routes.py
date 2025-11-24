@@ -61,6 +61,11 @@ def project(pid):
     selected_project = Project.query.filter_by(pid=pid).first()
     return render_template('project.html',project=selected_project)
 
+@main_bp.route("/project_application/<pid>", methods=['POST'])
+def project_application(pid):
+    #selected_project = Project.query.filter_by(pid=pid).first()  -- to be implemented later
+    return render_template('project_application.html')
+
 @main_bp.route("/submit_login", methods=['POST'])
 def submit_login():
     uid = controller.handle_login(request.form)
