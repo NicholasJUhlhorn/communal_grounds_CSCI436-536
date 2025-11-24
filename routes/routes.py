@@ -30,6 +30,10 @@ def my_projects():
         return redirect(url_for('main.profile_creation'))
     else:
         user = User.query.get(uid)
+
+        if not user:
+            return redirect(url_for('main.profile_creation'))
+
         return render_template('my_projects.html',my_projects=user.owned_projects)
 
 @main_bp.route("/submit_profile_creation", methods=['POST'])
@@ -46,8 +50,10 @@ def submit_profile_creation():
 def profile():
     curr_uid = session.get('current_uid')
     user = User.query.filter_by(uid=curr_uid).first()
-    if not curr_uid:
+
+    if not curr_uid or not user:
         return redirect(url_for('main.profile_creation'))
+
     return render_template('profile.html', friends_list=user_service.get_friends_list(curr_uid),username=user.username)
 
 @main_bp.route("/signout")
