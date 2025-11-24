@@ -132,7 +132,7 @@ def run_service_tests():
         bob_pw = "bob_password"
         u2 = run_test('User: Create User (Bob)', user_service.create_new_user, 
                       email='bob@test.com', username='Bob', password_hash=generate_password_hash(bob_pw))
-        charlie_pw = "alice_password"
+        charlie_pw = "charlie_password"
         u3 = run_test('User: Create User (Charlie)', user_service.create_new_user, 
                       email='charlie@test.com', username='Charlie', password_hash=generate_password_hash(charlie_pw))
 
