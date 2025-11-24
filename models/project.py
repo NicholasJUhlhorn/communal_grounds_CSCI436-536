@@ -16,13 +16,13 @@ class Project(db.Model):
     owner_uid = db.Column(db.Integer, db.ForeignKey('users.uid'), nullable=False)
 
     # --- Relationships ---
-    # 1. Many-to-One: Projects to Owner User
+    # Many-to-One: Projects to Owner User
     owner = db.relationship('User', back_populates='owned_projects')
     
-    # 2. Many-to-Many: Projects to Members (via ProjectMember)
+    # Many-to-Many: Projects to Members (via ProjectMember)
     members = db.relationship('ProjectMember', back_populates='project', lazy=True, cascade="all, delete-orphan")
 
-    # 3. One-to-Many: Projects to Reactions
+    # One-to-Many: Projects to Reactions
     reactions = db.relationship('Reaction', back_populates='project', lazy=True, cascade="all, delete-orphan")
     
     def __repr__(self):

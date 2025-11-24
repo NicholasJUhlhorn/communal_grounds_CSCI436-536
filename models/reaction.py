@@ -18,7 +18,7 @@ class Reaction(db.Model):
     project = db.relationship('Project', back_populates='reactions')
     user = db.relationship('User') # No need for back_populates unless you frequently list all reactions by a user
 
-    # Optional: enforce one reaction per user per project
+    # Enforce one reaction per user per project
     __table_args__ = (
         db.UniqueConstraint('pid', 'uid', name='_user_project_uc'),
     )

@@ -18,8 +18,6 @@ class User(db.Model):
     owned_projects = db.relationship('Project', back_populates='owner', lazy=True)
 
     # 2. Many-to-Many (Self-Referential): User to Friend_Requests
-    # We define 'requested_friends' (requests sent by this user) 
-    # and 'received_requests' (requests received by this user).
     requested_friends = db.relationship(
         'FriendRequest', 
         primaryjoin="User.uid == FriendRequest.requestor_uid", 
