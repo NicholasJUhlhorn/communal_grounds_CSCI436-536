@@ -2,7 +2,7 @@
 from services import project_service
 from services import reaction_service
 from services import user_service
-from werkzeug.security import generate_password_hash
+from werkzeug.security import generate_password_hash, check_password_hash
 from flask import session
 
 # DB FUNCTIONS FOR USER INTERACTIVITY
@@ -58,20 +58,6 @@ def change_project_description(pid: int, new_description: str):
 
     db.session.commit()
     return proj
-
-def find_uid_with_username(username: str):
-    """Finds and returns the uid of User with given username"""
-
-    user = db.session.execute(
-        db.select(User).where(
-            (User.username == username)
-        )
-    ).scalar_one_or_none()
-
-    if not user:
-        raise ValueError("User with given username not found")
-    
-    return user.uid
 
 def change_project_status(pid: int, new_status: str):
     """Updates a project's status"""
@@ -135,6 +121,20 @@ def handle_account_creation(form):
 def get_available_projects():
     '''
     Retrieves all PUBLISHED projects which the current user
-    is not already a part of 
+    is not already a part of
     '''
     ...
+
+def handle_login(form):
+    '''
+    attempts to login user based on given form info.
+    returns uid for user if successful, returns None if unsuccessful
+    '''
+    username = form.get("username")
+    password = form.get("password")
+    user = user_service.find_user_with_username(username)
+    if not user:
+        return None
+    if not check_password_hash(user.hashed_password, password):
+        return None
+    return user.uid

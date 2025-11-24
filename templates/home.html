@@ -7,21 +7,26 @@
     {% include 'blocks/header.html' %}    
     
     <h2> Home </h2>
+    {% for project in all_projects%}
     <li>
-        <label> Project Placeholder</label>
+        <label>{{project.name}}</label>
         <br>
         <img src="/images/WWU.jpg" width="100px">
-        <a> [insert description here]</a>
+        <a>{{project.description}}</a>
+        <br>
+        <a>created at: {{project.created_at}}</a>
         <br>
         
         <div class="progress">
             <div class="progress__fill"></div>
-            <span> 50% </span>
+            <span> {{project.status}} </span>
         </div>
         <br>
         <!--This button will eventually be used for requesting access to projets. Once accepted, it will show up in My Projects-->
         <button> apply</button>
+        <br>
     </li>
+    {% endfor %}
 
     <!-- This is the footer that will be present in every page-->
     {% include 'blocks/footer.html' %}    
