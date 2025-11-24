@@ -1,11 +1,355 @@
+/* Nicholas J Uhlhorn */
+/* November 2025 */
+/* --- 1. CSS Reset & Global Variables --- */
+
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
+:root {
+    /* Color Palette */
+    --color-primary: #5A8F7B;   /* Green/teal for accents */
+    --color-secondary: #E3B448; /* Warm yellow/gold for secondary action */
+    --color-text: #333333;      /* Dark text */
+    --color-text-light: #555555;/* Medium gray text */
+    --color-background: #F8F8F8;/* Light background */
+    --color-card-bg: #FFFFFF;   /* White for card/container backgrounds */
+    --color-border: #E0E0E0;    /* Light gray border */
+    
+    /* Typography */
+    --font-family-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    
+    /* Spacing */
+    --spacing-xs: 0.5rem;
+    --spacing-sm: 1rem;
+    --spacing-md: 1.5rem;
+    --spacing-lg: 2rem;
+}
+
+body {
+    margin: 0em, 4em;
+    padding: 0;
+    font-family: var(--font-family-sans);
+    line-height: 1.6;
+    color: var(--color-text);
+    background-color: var(--color-background);
+}
+
+/* --- 2. Layout & Typography --- */
+
+h1, h2, h3 {
+    line-height: 1.2;
+    margin-top: var(--spacing-lg);
+    margin-bottom: var(--spacing-md);
+    color: #2c3e50; /* A dark, deep color for headings */
+}
+
+h1 { font-size: 2rem; }
+h2 { font-size: 1.8rem; }
+h3 { font-size: 1.3rem; }
+
+main, 
+body > h2, body > h1, body > ul, body > div:not(.progress), body > a:not(.nav-link), body > img {
+    margin-left: auto;
+    margin-right: auto;
+    padding: 0 var(--spacing-sm);
+}
+
+/* --- 3. Header and Navigation (header.html) --- */
+
+header {
+    background-color: var(--color-card-bg);
+    padding: var(--spacing-sm);
+    border-bottom: 3px solid var(--color-primary); 
+    /* Remove default margins/padding from header.html's hr */
+    overflow: hidden; 
+}
+
+.site-header-content {
+    display: flex;
+    flex-direction: column; /* Mobile-First: Stack logo and nav vertically */
+    align-items: center;
+    margin: 0 auto;
+}
+
+header h1 {
+    font-size: 1.6rem;
+    margin: 0;
+}
+
+.logo-link {
+    text-decoration: none;
+    color: var(--color-primary);
+    font-weight: 700;
+}
+
+/* Navigation List */
+.main-nav ul {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-direction: column; /* Mobile: Stack links vertically */
+    align-items: center;
+    margin: var(--spacing-sm) 0 0 0;
+}
+
+.main-nav li {
+    margin: var(--spacing-xs) 0;
+}
+
+.main-nav a {
+    text-decoration: none;
+    color: var(--color-text-light);
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    transition: background-color 0.3s, color 0.3s;
+    display: block;
+    font-weight: 500;
+}
+
+.main-nav a:hover {
+    color: var(--color-card-bg);
+    background-color: var(--color-primary);
+}
+
+/* Hide the <hr> from header.html */
+header hr {
+    display: none; 
+}
+
+.about-wrapper {
+    background-color: var(--color-card-bg);
+    padding: var(--spacing-lg);
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    margin-bottom: var(--spacing-lg);
+    margin-top: var(--spacing-md);
+    padding: var(--spacing-sm) var(--spacing-sm);
+}
+
+.about-wrapper ul li {
+    margin-bottom: 0.5rem;
+    list-style: disc;
+}
+
+.about-wrapper li {
+    padding-left: 1.5rem;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}
+
+/* --- 4. Forms and Inputs (profile_creation.html, edit_profile.html) --- */
+
+form {
+    background-color: var(--color-card-bg);
+    padding: var(--spacing-lg);
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    margin-bottom: var(--spacing-lg);
+    margin-top: var(--spacing-md);
+    padding: var(--spacing-sm) var(--spacing-sm);
+}
+
+form div {
+    margin-bottom: 1rem;
+}
+
+label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"] {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid var(--color-border);
+    border-radius: 4px;
+    font-size: 1rem;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+input:focus, textarea:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px rgba(90, 143, 123, 0.2);
+}
+
+/* --- 5. Buttons --- */
+
+button,
+input[type="submit"] {
+    display: inline-block;
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    font-weight: 600;
+    text-align: center;
+    text-decoration: none;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s, opacity 0.3s;
+    
+    /* Primary Style */
+    color: white;
+    background-color: var(--color-primary);
+}
+
+button:hover,
+input[type="submit"]:hover {
+    background-color: #4a7a69; 
+}
+
+/* Secondary button style */
+li button {
+    background-color: var(--color-secondary);
+}
+
+li button:hover {
+    background-color: #c79e3f; 
+}
+
+/* --- 6. Project Lists & Cards --- */
+
+.project-card ul {
+    list-style: none;
+    padding: 0;
+    margin-top: var(--spacing-md);
+}
+
+.project-card ul li {
+    background-color: var(--color-card-bg);
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    padding: var(--spacing-md);
+    margin-bottom: var(--spacing-md);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.03);
+    /* The key fix: use overflow: auto to contain the floating image (clears float) */
+    overflow: auto; 
+    /* Removed: display: flex; and flex-direction: column; */
+}
+
+.project-card li img {
+    float: left; /* Revert to float for image placement */
+    width: 100px; /* Keep consistent with original HTML width */
+    height: 100px;
+    margin-right: var(--spacing-md);
+    margin-bottom: var(--spacing-sm);
+    border-radius: 4px;
+    object-fit: cover;
+    /* Removed: order: -1; */
+}
+
+.project-card li label {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--color-primary);
+    display: block;
+    margin-bottom: 0.5rem;
+}
+
+.project-card li a:not([href]) { 
+    display: block;
+    margin-top: 0.25rem;
+    color: var(--color-text-light);
+}
+
+.project-card li button {
+    margin-top: 1rem;
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+    align-self: flex-start; /* Aligns button to the left */
+}
+
+/* --- 7. Progress Bar --- */
+
 .progress {
-    width: 200px;
-    height: 20px;
-    background: #465344;
+    background-color: var(--color-border);
+    border-radius: 12px;
+    height: 24px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    overflow: hidden;
+    position: relative;
 }
 
 .progress__fill {
-    width: 50%;
     height: 100%;
-    background: #50b144;
+    background-color: var(--color-primary);
+    transition: width 0.4s ease;
+}
+
+.progress span {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-weight: bold;
+    color: white;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+    font-size: 0.85rem;
+}
+
+body > img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: var(--spacing-md) auto;
+    border-radius: 8px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* --- 8. Footer (footer.html) --- */
+
+footer {
+    margin: var(--spacing-lg) auto var(--spacing-sm) auto;
+    padding: var(--spacing-sm);
+    text-align: center;
+    font-size: 0.85rem;
+    color: #999;
+}
+
+footer hr {
+    display: block;
+    border: 0;
+    height: 1px;
+    background-color: var(--color-border);
+    margin-bottom: 1rem;
+}
+
+/* ======================================= */
+/* --- 9. MOBILE RESPONSIVENESS (Media Query) --- */
+/* ======================================= */
+
+/* Styles for screens wider than 768px (Desktop/Tablet landscape) */
+@media (min-width: 768px) {
+    
+    /* Header (Horizontal Layout) - KEEP these fixes */
+    .site-header-content {
+        flex-direction: row; 
+        justify-content: space-between;
+    }
+    
+    .main-nav ul {
+        flex-direction: row; 
+        margin: 0;
+    }
+
+    .main-nav li {
+        margin-left: var(--spacing-sm);
+    }
+    
+    /* Project List (Image size adjustment for desktop) */
+    project-card li {
+        /* Re-apply desktop padding for a more spacious feel */
+        padding: var(--spacing-lg); 
+    }
+    
+    li img {
+        /* On desktop, keep float, increase image size slightly */
+        width: 120px; 
+        height: 120px;
+    }
 }
