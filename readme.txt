@@ -14,3 +14,5 @@ To build the docker image manually run the following command: `docker build -t f
 To run the server run the following command: `docker run -p 5000:5000 flask-app-docker`\\
 The application will be ran locally on port 5000.
 
+## Alternative Build/Run
+You may also use the makefile to run/build the project if you have docker-compose.
