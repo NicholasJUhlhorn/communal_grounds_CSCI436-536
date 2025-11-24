@@ -20,7 +20,7 @@
             <span>{{project.status}} </span>
         </div>
         <br>
-        <a href="{{ url_for('main.project', pid = 'dummy') }}">
+        <a href="{{ url_for('main.project', pid =project.pid) }}">
             <button> Visit</button>
         </a>
     </li>

@@ -7,6 +7,7 @@ from controller import controller
 from services import user_service
 from models.project import Project
 from models.user import User
+from models.project import Project
 
 main_bp = Blueprint('main', __name__)
 
@@ -63,7 +64,13 @@ def signout():
 
 @main_bp.route("/project/<pid>")
 def project(pid):
-    return render_template('project.html')
+    selected_project = Project.query.filter_by(pid=pid).first()
+    return render_template('project.html',project=selected_project)
+
+@main_bp.route("/project_application/<pid>", methods=['POST'])
+def project_application(pid):
+    #selected_project = Project.query.filter_by(pid=pid).first()  -- to be implemented later
+    return render_template('project_application.html')
 
 @main_bp.route("/edit_profile")
 def edit_profile():
@@ -77,3 +84,7 @@ def submit_login():
 
     session['current_uid'] = uid
     return profile()
+
+@main_bp.route("/edit_profile")
+def edit_profile():
+    return render_template('edit_profile.html')
