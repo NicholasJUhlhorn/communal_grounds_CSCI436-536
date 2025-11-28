@@ -69,18 +69,23 @@ def project(pid):
 
 @main_bp.route("/project_application/<pid>", methods=['GET', 'POST'])
 def project_application(pid):
+    # Make sure the session has a logged user first.
+    try:
+        uid = session['current_uid']
+    except:
+       return redirect(url_for('main.profile_creation'))
+
     project = None
     try:
         project = project_service.get_project_with_related_data(pid) 
-        print(project)
     except Exception as e:
         print(f'Error grabing project: {e}', flush=True)
         return render_template('something_went_wrong.html')
-    print(project)
+
+    if project is None:
+        return render_template('something_went_wrong.html')
 
     member_uids = [pm.member.uid for pm in project.members]
-
-    uid = session['current_uid']
     is_member = uid in member_uids
 
     if is_member:
