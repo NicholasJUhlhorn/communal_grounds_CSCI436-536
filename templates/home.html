@@ -25,7 +25,9 @@
                 </div>
                 <br>
                 <!--This button will eventually be used for requesting access to projets. Once accepted, it will show up in My Projects-->
-                <button> apply</button>
+                <form methods="POST" action="{{ url_for('main.project_application', pid=project.pid) }}">
+                    <button type="submit">Apply</button>
+                </form>
                 <br>
             </li>
             {% endfor %}

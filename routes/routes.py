@@ -4,7 +4,7 @@
 from flask import Blueprint
 from flask import Flask, render_template, session, request, redirect, url_for
 from controller import controller
-from services import user_service
+from services import user_service, project_service
 from models.project import Project
 from models.user import User
 from models.project import Project
@@ -67,9 +67,27 @@ def project(pid):
     selected_project = Project.query.filter_by(pid=pid).first()
     return render_template('project.html',project=selected_project)
 
-@main_bp.route("/project_application/<pid>", methods=['POST'])
+@main_bp.route("/project_application/<pid>", methods=['GET', 'POST'])
 def project_application(pid):
-    #selected_project = Project.query.filter_by(pid=pid).first()  -- to be implemented later
+    project = None
+    try:
+        project = project_service.get_project_with_related_data(pid) 
+        print(project)
+    except Exception as e:
+        print(f'Error grabing project: {e}', flush=True)
+        return render_template('something_went_wrong.html')
+    print(project)
+
+    member_uids = [pm.member.uid for pm in project.members]
+
+    uid = session['current_uid']
+    is_member = uid in member_uids
+
+    if is_member:
+        return render_template('project.html', project=project)
+    
+    project_service.add_project_member(pid, uid, role="PETITION")
+
     return render_template('project_application.html')
 
 @main_bp.route("/edit_profile")
