@@ -1,3 +1,58 @@
-<body>
-    <p>Hello, World!</p>
 </body>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Communal Grounds – Project Page</title>
+    <link rel="stylesheet" href="static/style.css">
+</head>
+<body>
+    <nav>
+        <div class="nav-container">
+            <a href="index.html">Home</a>
+            <a href="about.html">About</a>
+            <a href="methodology.html">Methodology</a>
+            <a href="contact.html">Contact</a>
+        </div>
+    </nav>
+    <main class="main-content">
+        <h1>Introducing Communal Grounds</h1>
+            <p>A project for CSCI436/536: Technology for Social Good with <b>Dr. Shameem Ahmed</b>.</p>
+        <section>
+            <div class="video-container">
+                <video controls>
+                    <source src="static/project_video.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+            </div>
+        </section>
+        <section>
+            <p>Communal Grounds is a volunteer organization web application built with Flask. Its core functionality focuses on managing community projects and the people that work on them.</p>
+            <h3>Key Features:</h3>
+            <ul>
+                <li><b>User Management:</b> The platform tracks user state, allows sign-up with passwords, and enables current users to edit their profiles and manage a friend list.</li>
+                <li><b>Project Organization:</b> Projects are displayed on the home page and users can apply to join a project, allowing hosts to handpick members for better security and fit.</li>
+                <li><b>Detailed Profiles:</b> User profiles show active projects and participation percentages to promote active participation.</li>
+                <li><b>Project Communication & Delegation:</b> Each project has a central hub. Project owners can assign specific roles or job titles to users to clearly define responsibilities and tasks for effective work delegation.</li>
+            </ul>
+        </section>
+        <section>
+            <h2>Technologies Used</h2>
+            <p>The Communal Grounds application is built on a Model-View-Controller (MVC) architectural pattern.</p>
+            <ul>
+                <li><b>Database:</b> The application uses a SQLite DB to store all platform data, including tables for Users, Projects, Project Members, and Reactions.</li>
+                <li><b>Backend Framework:</b> Python and a framework like Flask are used for the Controller and Model layers. This includes logic for handling user input, managing session state, and interacting with the database.</li>
+                <li><b>Web Technology:</b> Standard HTML, CSS (for style and feel), and dynamic routing are used for the View and presentation layer.</li>
+            </ul>
+        </section>
+        <section>
+            <h2>Codebase</h2>
+            <p>Check out the Project on Github: <a href="https://github.com/NicholasJUhlhorn/communal_grounds_CSCI436-536" target="_blank">here.</a></p>
+        </section>
+    </main>
+    <footer>
+        &copy; 2025 Communal Grounds | Quincy Odom, Brian Rink, Nicholas Uhlhorn
+    </footer>
+</body>
+</html>
