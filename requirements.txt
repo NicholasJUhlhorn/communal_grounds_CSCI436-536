@@ -1,5 +1,0 @@
-# Nicholas J Uhlhorn
-# November 2025
-
-flask
-flask_sqlalchemy 

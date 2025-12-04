@@ -3,4 +3,5 @@
 
 # ignore local db data folder
 db_data
-
+# ignore Visual Studio files
+.vs
