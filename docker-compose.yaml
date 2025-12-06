@@ -7,4 +7,4 @@ services:
     volumes:
       - ./db_data:/app/db_data
     ports:
-      - 5000:5000
+      - 5001:5001
