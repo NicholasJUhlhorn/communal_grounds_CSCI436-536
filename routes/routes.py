@@ -20,7 +20,7 @@ def home():
 def about():
     return render_template('about.html')
 
-@main_bp.route("/profile_creation")
+@main_bp.route("/profile_creation", methods=['POST'])
 def profile_creation():
     return render_template('profile_creation.html')
 
@@ -28,12 +28,14 @@ def profile_creation():
 def my_projects():
     uid = session.get('current_uid')
     if not uid:
-        return redirect(url_for('main.profile_creation'))
+        flash("Please log in first.", 'warning')
+        return redirect(url_for('main.login'))
     else:
         user = User.query.get(uid)
 
         if not user:
-            return redirect(url_for('main.profile_creation'))
+            flash("Please log in first.", 'warning')
+            return redirect(url_for('main.login'))
 
         return render_template('my_projects.html',my_projects=user.owned_projects)
 
@@ -45,6 +47,9 @@ def submit_profile_creation():
         new_user = controller.handle_account_creation(request.form)
         session['current_uid'] = new_user.uid
         return profile()
+    else:
+        flash("Profile Creation Failed: User profile name already exists.", 'error')
+
     return profile_creation()
 
 @main_bp.route("/profile")
@@ -53,14 +58,19 @@ def profile():
     user = User.query.filter_by(uid=curr_uid).first()
 
     if not curr_uid or not user:
-        return redirect(url_for('main.profile_creation'))
+        flash("Please log in first.", 'warning')
+        return redirect(url_for('main.login'))
 
     return render_template('profile.html', friends_list=user_service.get_friends_list(curr_uid),username=user.username)
+
+@main_bp.route("/login", methods=['GET', 'POST'])
+def login():
+    return render_template('login.html')
 
 @main_bp.route("/signout")
 def signout():
     session.pop('current_uid')
-    return profile_creation()
+    return login()
 
 @main_bp.route("/project/<pid>")
 def project(pid):
@@ -73,7 +83,8 @@ def project_application(pid):
     try:
         uid = session['current_uid']
     except:
-       return redirect(url_for('main.profile_creation'))
+        flash("Please log in first.", 'warning')
+        return redirect(url_for('main.login'))
 
     project = None
     try:
@@ -103,10 +114,8 @@ def edit_profile():
 def submit_login():
     uid = controller.handle_login(request.form)
     if not uid:
-        print(f'NO UDI: {uid}', flush=True)
         flash("Login Failed: Invalid username and/or password.", 'error')
-        return redirect(url_for('main.profile_creation'))
+        return redirect(url_for('main.login'))
 
     session['current_uid'] = uid
-    print(session['current_uid'], uid, flush=True)
     return profile()

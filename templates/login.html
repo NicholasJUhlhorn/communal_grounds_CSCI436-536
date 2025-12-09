@@ -6,18 +6,11 @@
     <!--This is the header that will be present in every page-->
     {% include 'blocks/header.html' %}  
 
-    <h2> Create Your Profile </h2>
-    <form action="{{ url_for('main.submit_profile_creation') }}" method="POST">
+    <h2> Login </h2>
+    <form action="{{ url_for('main.submit_login') }}" method="POST">
         <div>
             <label for="username">username</label>
             <input name="username" type="text" id="username" required>
-        </div>
-
-        <br>
-
-        <div>
-            <label for="email">email</label>
-            <input name="email" type="text" id="email" required>
         </div>
 
         <br>
@@ -30,10 +23,17 @@
         <br>
 
         <div>
-            <input type="submit", value='Create Account'>
+            <input type="submit", value='Login'>
         </div>
     </form>
 
+    <h2> Don't have an Account? </h2>
+
+    <form action="{{ url_for('main.profile_creation') }}" method="POST">
+        <div>
+            <input type='submit', value='Create Account'>
+        </div>
+    </form>
 
     <!-- This is the footer that will be present in every page-->
     {% include 'blocks/footer.html' %}    

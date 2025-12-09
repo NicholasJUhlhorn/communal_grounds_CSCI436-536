@@ -7,6 +7,11 @@
             <li><a href="{{ url_for('main.about') }}" target="_self">About</a></li>
             <li><a href="{{ url_for('main.my_projects') }}" target="_self">My Projects</a></li>
             <li class="profile-link"><a href="{{ url_for('main.profile') }}" target="_self">Profile</a></li>
+            {% if session['current_uid'] %}
+                <li><a href="{{ url_for('main.signout') }}" target="_self">Log Out</a></li>
+            {% else %}
+                <li><a href="{{ url_for('main.login') }}" target="_self">Log In</a></li>
+            {% endif %}
         </ul>
     </nav>
 </div>
