@@ -1,0 +1,49 @@
+<!-- Template modified from https://flask.palletsprojects.com/en/stable/patterns/flashing/ -->
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    <div class="flash-messages-container">
+      {% for category, message in messages %}
+        <div class="flash flash-message flash-{{ category }}">
+          {{ message }}
+          <button class="close-flash-message">&times;</button>
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+{% endwith %}
+
+<!-- Custom js script for automatic closing and button functionality -->
+<script>
+    document.addEventListener('DOMContentLoaded', (event) => {
+    function closeFlashMessage(messageElement) {
+        messageElement.classList.add('fade-out');
+
+        setTimeout(() => {
+            messageElement.classList.add('hidden');
+            if (messageElement.parentNode) {
+                messageElement.parentNode.removeChild(messageElement);
+            }
+        }, 500); // Must match CSS transition time (0.5s = 500ms)
+    }
+
+    // Handle close buttons (manual closing)
+    const closeButtons = document.querySelectorAll('.close-flash-message');
+    closeButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const messageElement = button.closest('.flash-message');
+            if (messageElement) {
+                closeFlashMessage(messageElement);
+            }
+        });
+    });
+
+    // Handle automatic closing (timed fade)
+    const flashMessages = document.querySelectorAll('.flash-message');
+    flashMessages.forEach(message => {
+        const displayTime = 5000; // 5 seconds
+        setTimeout(() => {
+            closeFlashMessage(message);
+        }, displayTime);
+    });
+    });
+</script>

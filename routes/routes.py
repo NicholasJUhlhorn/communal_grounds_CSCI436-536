@@ -2,7 +2,7 @@
 # November 2025
 
 from flask import Blueprint
-from flask import Flask, render_template, session, request, redirect, url_for
+from flask import Flask, render_template, session, request, redirect, url_for, flash
 from controller import controller
 from services import user_service, project_service
 from models.project import Project
@@ -99,11 +99,14 @@ def project_application(pid):
 def edit_profile():
     return render_template('edit_profile.html')
 
-@main_bp.route("/submit_login", methods=['POST'])
+@main_bp.route("/submit_login", methods=['GET', 'POST'])
 def submit_login():
     uid = controller.handle_login(request.form)
     if not uid:
+        print(f'NO UDI: {uid}', flush=True)
+        flash("Login Failed: Invalid username and/or password.", 'error')
         return redirect(url_for('main.profile_creation'))
 
     session['current_uid'] = uid
+    print(session['current_uid'], uid, flush=True)
     return profile()
