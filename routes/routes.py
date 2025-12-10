@@ -96,9 +96,13 @@ def project(pid):
     has_joined = is_member and member_dict[uid] != 'PETITION'
     can_view = is_owner or (is_member and has_joined) 
 
-    if not can_view:
+    if not is_member:
         flash('You are not part of this project, send a petition and wait for approval to view.', 'warning')
         return redirect(url_for('main.home'))
+    elif not has_joined:
+        flash('Your petition is pending, wait for approval to view.', 'warning')
+        return my_projects()
+
 
     selected_project = Project.query.filter_by(pid=pid).first()
     
