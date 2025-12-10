@@ -8,6 +8,9 @@
     {% include 'blocks/header.html' %}    
     
     <h2> My Projects </h2>
+        <div>
+            <a href="{{ url_for('main.create_project') }}"><button>Create New Project</button></a>     
+        </div>
     {% for project in joined_projects%}
         <li>
             <label>{{project.name}}</label>

@@ -129,7 +129,10 @@ def edit_project(pid):
         return redirect(url_for('main.my_projects'))
 
     return render_template('project_edit.html', project=project)
-    
+
+@main_bp.route("/create_project")
+def create_project():
+    return render_template('project_creation.html')
 
 @main_bp.route("/addmember", methods=['POST'])
 def add_member():
@@ -202,6 +205,26 @@ def process_project_edit():
     project_service.update_project(pid, name, description, status)
     flash('Project information updated.', 'success')
     return redirect(url_for('main.project', pid=pid))
+
+@main_bp.route("/process_project_create", methods=['GET','POST'])
+def process_project_create():
+    action = request.form.get('save-action')
+    name = request.form.get('name')
+    description = request.form.get('description')
+    status = request.form.get('status')
+
+    uid = session.get('current_uid')
+    if not uid:
+        flash("Please log in first.", 'warning')
+        return redirect(url_for('main.login'))
+
+    if action == 'cancel':
+        flash("Project creation canceled.", "warning")
+        return redirect(url_for('main.my_projects'))
+
+    new_project = project_service.create_new_project(uid, name, description, status)
+    flash("Project Created!", "success")
+    return redirect(url_for('main.project', pid=new_project.pid))
 
 @main_bp.route("/edit_profile")
 def edit_profile():
