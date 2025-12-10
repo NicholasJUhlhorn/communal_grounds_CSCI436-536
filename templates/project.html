@@ -12,15 +12,28 @@
     <a> {{project.description}}</a>
     <br>
     <div class="progress">
-            <div class="progress__fill"></div>
-            <span> {{project.status}} </span>
+        <div class="progress__fill" style="width: {{ project.status * 100 }}%;">
+            <span>{{ (project.status * 100) | round(0) }}% </span>
+        </div>
     </div>
     <h2>Members</h2>
+    <ul class='member-list'>
     {% for member in project.members %}
-        <li>
+        <li class='member-card'>
+            <form action='{{ url_for('main.add_member') }}' method="POST">
             {{ member.member.username }} - {{ member.role }}
+            {% if member.role == 'PETITION' and is_owner %}
+                    <input type="hidden" name="pid" value="{{ project.pid }}">
+                    <input type="hidden" name="uid" value="{{ member.uid }}">
+                    <input type="hidden" name="role" value="VIEWER">
+                    <div>
+                        <input type='submit', value='Aprove'>
+                    </div>
+            {% endif %}
+            </form>
         </li>
     {% endfor %}
+    </ul>
 
     <!-- This is the footer that will be present in every page-->
     {% include 'blocks/footer.html' %}    

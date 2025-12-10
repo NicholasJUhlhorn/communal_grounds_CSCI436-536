@@ -2,15 +2,16 @@
 
 <html>
 {% include 'blocks/head.html' %}
+{% include "layout.html" %}
 <body>
     <!--This is the header that will be present in every page-->
     {% include 'blocks/header.html' %}    
     
     <h2> Home </h2>
-    <div class="project-card">
+    <div class="project-card-list">
         <ul>
             {% for project in all_projects%}
-            <li>
+            <li class='project-card'>
                 <label>{{project.name}}</label>
                 <br>
                 <img src="/static/images/WWU.jpg" width="100px">

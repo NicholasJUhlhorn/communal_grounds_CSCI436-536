@@ -174,7 +174,7 @@ def run_service_tests():
 
         # 4. Add Member
         run_test('Member: Bob joins Alice\'s Project (EDITOR)', project_service.add_project_member,
-                 pid=alice_project.pid, uid=bob.uid, role='EDITOR')
+                 pid=alice_project.pid, uid=bob.uid, role='PETITION')
 
         # 5. Check Eager Load
         p_data = project_service.get_project_with_related_data(alice_project.pid)

@@ -73,16 +73,60 @@ def signout():
     session.pop('current_uid')
     return login()
 
-@main_bp.route("/project/<pid>")
+@main_bp.route("/project/<pid>", methods=['GET', 'POST'])
 def project(pid):
+    try:
+        uid = session.get('current_uid')
+    except:
+        flash("Please log in first.", 'warning')
+        return redirect(url_for('main.login'))
+
+    project = None
+    try:
+        project = project_service.get_project_with_related_data(pid) 
+    except Exception as e:
+        print(f'Error grabing project: {e}', flush=True)
+        return render_template('something_went_wrong.html')
+
+    member_uids = [pm.member.uid for pm in project.members]
+    member_roles = [pm.role for pm in project.members]
+    member_dict = dict(zip(member_uids, member_roles))
+    is_owner = uid == project.owner.uid
+    is_member = uid in member_uids
+    has_joined = is_member and member_dict[uid] != 'PETITION'
+    can_view = is_owner or (is_member and has_joined) 
+
+    if not can_view:
+        flash('You are not part of this project, send a petition and wait for approval to view.', 'warning')
+        return redirect(url_for('main.home'))
+
     selected_project = Project.query.filter_by(pid=pid).first()
-    return render_template('project.html',project=selected_project)
+    
+    return render_template('project.html',project=selected_project, is_owner=is_owner)
+
+@main_bp.route("/addmember", methods=['POST'])
+def add_member():
+    pid = request.form.get('pid')
+    uid = request.form.get('uid')
+    role = request.form.get('role')
+
+    if not pid:
+        flash("Please log in first.", 'warning')
+        return redirect(url_for('main.login'))
+
+    if pid and uid and role:
+        selected_project = Project.query.filter_by(pid=pid).first()
+        project_service.update_project_member(pid, uid, role)
+        return render_template('project.html', project=selected_project)
+    else:
+        print(f'Error adding member: {e}', flush=True)
+        return render_template('something_went_wrong.html')
 
 @main_bp.route("/project_application/<pid>", methods=['GET', 'POST'])
 def project_application(pid):
     # Make sure the session has a logged user first.
     try:
-        uid = session['current_uid']
+        uid = session.get('current_uid')
     except:
         flash("Please log in first.", 'warning')
         return redirect(url_for('main.login'))
@@ -98,10 +142,18 @@ def project_application(pid):
         return render_template('something_went_wrong.html')
 
     member_uids = [pm.member.uid for pm in project.members]
+    member_roles = [pm.role for pm in project.members]
+    member_dict = dict(zip(member_uids, member_roles))
+    is_owner = uid == project.owner.uid
     is_member = uid in member_uids
+    has_joined = is_member and member_dict[uid] != 'PETITION'
+    can_view = is_owner or (is_member and has_joined) 
 
-    if is_member:
-        return render_template('project.html', project=project)
+    if can_view:
+        return render_template('project.html', project=project, is_owner=is_owner)
+    elif is_member:
+        flash('Your petition is pending, wait for approval to view.', 'warning')
+        return redirect(url_for('main.home'))
     
     project_service.add_project_member(pid, uid, role="PETITION")
 
@@ -119,4 +171,5 @@ def submit_login():
         return redirect(url_for('main.login'))
 
     session['current_uid'] = uid
-    return profile()
+    return my_projects()
+

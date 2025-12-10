@@ -153,6 +153,10 @@ form div {
     margin-bottom: 1rem;
 }
 
+.member-card {
+    flex-display: block;
+}
+
 label {
     display: block;
     margin-bottom: 0.5rem;
@@ -210,15 +214,19 @@ li button:hover {
     background-color: #c79e3f; 
 }
 
+.member-list {
+    list-style: none;
+}
+
 /* --- 6. Project Lists & Cards --- */
 
-.project-card ul {
+.project-card-list ul {
     list-style: none;
     padding: 0;
     margin-top: var(--spacing-md);
 }
 
-.project-card ul li {
+.project-card-list ul li {
     background-color: var(--color-card-bg);
     border: 1px solid var(--color-border);
     border-radius: 8px;
@@ -230,7 +238,7 @@ li button:hover {
     /* Removed: display: flex; and flex-direction: column; */
 }
 
-.project-card li img {
+.project-card-list li img {
     float: left; /* Revert to float for image placement */
     width: 100px; /* Keep consistent with original HTML width */
     height: 100px;
@@ -241,7 +249,7 @@ li button:hover {
     /* Removed: order: -1; */
 }
 
-.project-card li label {
+.project-card-list li label {
     font-size: 1.25rem;
     font-weight: 700;
     color: var(--color-primary);
@@ -249,13 +257,13 @@ li button:hover {
     margin-bottom: 0.5rem;
 }
 
-.project-card li a:not([href]) { 
+.project-card-list li a:not([href]) { 
     display: block;
     margin-top: 0.25rem;
     color: var(--color-text-light);
 }
 
-.project-card li button {
+.project-card-list li button {
     margin-top: 1rem;
     padding: 0.5rem 1rem;
     font-size: 0.9rem;
@@ -398,7 +406,7 @@ footer hr {
     }
     
     /* Project List (Image size adjustment for desktop) */
-    project-card li {
+    project-card-list li {
         /* Re-apply desktop padding for a more spacious feel */
         padding: var(--spacing-lg); 
     }

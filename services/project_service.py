@@ -74,3 +74,19 @@ def add_project_member(pid: int, uid: int, role: str = 'VIEWER') -> ProjectMembe
     db.session.add(member)
     db.session.commit()
     return member
+
+def update_project_member(pid: int, uid: int, role: str) -> ProjectMember:
+    """Update a user in a project with a new role, adds user if they are not present on the project already"""
+    existing_member = db.session.execute(
+        db.select(ProjectMember).where(
+            (ProjectMember.pid == pid) & (ProjectMember.uid == uid)
+        )
+    ).scalar_one_or_none()
+
+    if not existing_member:
+        return add_project_member(pid, uid, role)
+
+    existing_member.role = role
+    db.session.commit()
+    return existing_member
+
