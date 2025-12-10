@@ -158,10 +158,11 @@ def run_service_tests():
 
         # 2. Create Projects
         p1_result = run_test('Project: Create Project (Alice\'s)', project_service.create_new_project,
-                      owner_uid=alice.uid, name='Alice\'s Public Project', description='Public Project')
+                      owner_uid=alice.uid, name='Alice\'s Project', description="This is Alice's project", status=0.5)
         p2_result = run_test('Project: Create Project (Bob\'s)', project_service.create_new_project,
-                      owner_uid=bob.uid, name='Bob\'s Draft Project', description='Draft Project')
+                      owner_uid=bob.uid, name='Bob\'s Project', description="This is Bob's project")
 
+        print(f'p1_result: {p1_result}', flush=True)
         alice_project = Project.query.filter_by(owner_uid=alice.uid).first()
 
         # 3. Read Operations

@@ -36,8 +36,9 @@ def my_projects():
         if not user:
             flash("Please log in first.", 'warning')
             return redirect(url_for('main.login'))
+        print(f'Joined Projects: {user.joined_projects}', flush=True)
 
-        return render_template('my_projects.html',my_projects=user.owned_projects)
+        return render_template('my_projects.html',my_projects=user.owned_projects,joined_projects=user.joined_projects)
 
 @main_bp.route("/submit_profile_creation", methods=['POST'])
 def submit_profile_creation():

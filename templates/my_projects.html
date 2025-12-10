@@ -7,23 +7,24 @@
     {% include 'blocks/header.html' %}    
     
     <h2> My Projects </h2>
-    {% for project in my_projects%}
-    <li>
-        <label>{{project.name}}</label>
-        <br>
-        <img src="/static/images/WWU.jpg" width="100px">
-        <a>{{project.description}}</a>
-        <br>
-        
-        <div class="progress">
-            <div class="progress__fill"></div>
-            <span>{{project.status}} </span>
-        </div>
-        <br>
-        <a href="{{ url_for('main.project', pid =project.pid) }}">
-            <button> Visit</button>
-        </a>
-    </li>
+    {% for project in joined_projects%}
+        <li>
+            <label>{{project.name}}</label>
+            <br>
+            <img src="/static/images/WWU.jpg" width="100px">
+            <p>{{project.role}}</p>
+            <a>{{project.description}}</a>
+            <br>
+            
+            <div class="progress">
+                <div class="progress__fill"></div>
+                <span>{{project.status}} </span>
+            </div>
+            <br>
+            <a href="{{ url_for('main.project', pid =project.pid) }}">
+                <button> Visit</button>
+            </a>
+        </li>
     {% endfor %}
 
     <!-- This is the footer that will be present in every page-->

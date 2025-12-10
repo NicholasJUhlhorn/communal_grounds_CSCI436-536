@@ -9,7 +9,8 @@ class Project(db.Model):
     pid = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(100), nullable=False)
     description = db.Column(db.Text)
-    status = db.Column(db.String(20), nullable=False, default='DRAFT')
+    visibility = db.Column(db.String(20), nullable=False, default='DRAFT')
+    status = db.Column(db.Float, nullable=False, default=0.0)
     created_at = db.Column(db.DateTime, nullable=False, server_default=func.now())
     
     # ForeignKey for the owner (Many-to-One)
@@ -39,8 +40,8 @@ class ProjectMember(db.Model):
 
     # --- Relationships ---
     # Bi-directional relationships to access the related objects
-    project = db.relationship('Project', back_populates='members')
-    member = db.relationship('User') # Relationship to the user object
+    project = db.relationship('Project', back_populates='members', viewonly=True)
+    member = db.relationship('User')
     
     def __repr__(self):
         return f'<ProjectMember PID:{self.pid} UID:{self.uid} Role:{self.role}>'

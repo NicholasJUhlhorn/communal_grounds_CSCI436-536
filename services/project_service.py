@@ -7,13 +7,14 @@ from sqlalchemy.orm import selectinload
 
 # --- PROJECT CRUD ---
 
-def create_new_project(owner_uid: int, name: str, description: str = None) -> Project:
+def create_new_project(owner_uid: int, name: str, description: str = None, status = 0.0) -> Project:
     """Creates a new project and sets the owner."""
     project = Project(
         owner_uid=owner_uid,
         name=name,
         description=description,
-        status='DRAFT'
+        visibility='PUBLISHED',
+        status=status,
     )
     db.session.add(project)
     db.session.commit()
@@ -33,7 +34,7 @@ def get_project_details(pid: int) -> Project:
 
 def get_all_published_projects() -> list[Project]:
     """Retrieves all projects with status 'PUBLISHED'."""
-    return db.session.execute(db.select(Project).where(Project.status == 'PUBLISHED')).scalars().all()
+    return db.session.execute(db.select(Project).where(Project.visibility == 'PUBLISHED')).scalars().all()
 
 
 def get_project_with_related_data(pid: int) -> Project:

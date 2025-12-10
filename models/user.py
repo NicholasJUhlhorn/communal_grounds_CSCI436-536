@@ -16,6 +16,7 @@ class User(db.Model):
     # 1. One-to-Many: User to Projects (Projects owned by the user)
     # 'owner' in Project will point back to this User object
     owned_projects = db.relationship('Project', back_populates='owner', lazy=True)
+    joined_projects = db.relationship('Project', secondary='project_members', viewonly=True, lazy=True)
 
     # 2. Many-to-Many (Self-Referential): User to Friend_Requests
     requested_friends = db.relationship(
