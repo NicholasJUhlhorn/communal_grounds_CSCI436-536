@@ -153,11 +153,12 @@ def project_application(pid):
         return render_template('project.html', project=project, is_owner=is_owner)
     elif is_member:
         flash('Your petition is pending, wait for approval to view.', 'warning')
-        return redirect(url_for('main.home'))
+        return my_projects()
     
     project_service.add_project_member(pid, uid, role="PETITION")
 
-    return render_template('project_application.html')
+    flash('Petetion for project submitted!', 'success')
+    return my_projects()
 
 @main_bp.route("/edit_profile")
 def edit_profile():
