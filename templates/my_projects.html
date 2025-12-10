@@ -17,8 +17,9 @@
             <br>
             
             <div class="progress">
-                <div class="progress__fill"></div>
-                <span>{{project.status}} </span>
+                <div class="progress__fill" style="width: {{ project.status * 100 }}%;">
+                    <span>{{ (project.status * 100) | round(0) }}% </span>
+                </div>
             </div>
             <br>
             <a href="{{ url_for('main.project', pid =project.pid) }}">
