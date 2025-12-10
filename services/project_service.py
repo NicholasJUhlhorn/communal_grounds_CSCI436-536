@@ -90,3 +90,20 @@ def update_project_member(pid: int, uid: int, role: str) -> ProjectMember:
     db.session.commit()
     return existing_member
 
+    project_service.update_project(pid, name, description, status)
+
+def update_project(pid: int, name: str, description: str, status: float):
+    existing_project = db.session.execute(
+        db.select(Project).where(
+            (Project.pid == pid)
+        )
+    ).scalar_one_or_none()
+
+    if not existing_project:
+        return None
+
+    existing_project.name = name
+    existing_project.description = description 
+    existing_project.status = status
+    db.session.commit()
+    return existing_project

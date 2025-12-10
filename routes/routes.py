@@ -101,12 +101,35 @@ def project(pid):
         return redirect(url_for('main.home'))
     elif not has_joined:
         flash('Your petition is pending, wait for approval to view.', 'warning')
-        return my_projects()
+        return redirect(url_for('main.my_projects'))
 
 
     selected_project = Project.query.filter_by(pid=pid).first()
     
     return render_template('project.html',project=selected_project, is_owner=is_owner)
+
+@main_bp.route('/project/<pid>/edit')
+def edit_project(pid):
+    try:
+        uid = session.get('current_uid')
+    except:
+        flash("Please log in first.", 'warning')
+        return redirect(url_for('main.login'))
+
+    project = None
+    try:
+        project = project_service.get_project_with_related_data(pid) 
+    except Exception as e:
+        print(f'Error grabing project: {e}', flush=True)
+        return render_template('something_went_wrong.html')
+
+    is_owner = uid == project.owner.uid
+    if not is_owner:
+        flash("You are not the owner of that project!", 'error')
+        return redirect(url_for('main.my_projects'))
+
+    return render_template('project_edit.html', project=project)
+    
 
 @main_bp.route("/addmember", methods=['POST'])
 def add_member():
@@ -157,12 +180,28 @@ def project_application(pid):
         return render_template('project.html', project=project, is_owner=is_owner)
     elif is_member:
         flash('Your petition is pending, wait for approval to view.', 'warning')
-        return my_projects()
+        return redirect(url_for('main.my_projects'))
     
     project_service.add_project_member(pid, uid, role="PETITION")
 
     flash('Petetion for project submitted!', 'success')
-    return my_projects()
+    return redirect(url_for('main.my_projects'))
+
+@main_bp.route("/process_project_edit", methods=['GET', 'POST'])
+def process_project_edit():
+    pid = request.form.get('pid')
+    action = request.form.get('save-action')
+    name = request.form.get('name')
+    description = request.form.get('description')
+    status = request.form.get('status')
+
+    if action == 'cancel':
+        flash('Edits not committed.', 'warning')
+        return redirect(url_for('main.project', pid=pid))
+
+    project_service.update_project(pid, name, description, status)
+    flash('Project information updated.', 'success')
+    return redirect(url_for('main.project', pid=pid))
 
 @main_bp.route("/edit_profile")
 def edit_profile():
@@ -176,5 +215,5 @@ def submit_login():
         return redirect(url_for('main.login'))
 
     session['current_uid'] = uid
-    return my_projects()
+    return redirect(url_for('main.my_projects'))
 

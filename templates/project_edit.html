@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+
+<html>
+{% include 'blocks/head.html' %}
+<body>
+    <!--This is the header that will be present in every page-->
+    {% include 'blocks/header.html' %}    
+
+    <h1> {{project.name}} -- EDITING </h1>
+    <img src="/static/images/WWU.jpg" width="500px" height="250px">
+    <br>
+    <form class='project-edit', action='{{ url_for('main.process_project_edit') }}', method='POST'>
+        <input name='pid', type='hidden', value='{{ project.pid }}'>
+        <label>Project Name:</label>
+        <input name='name' value='{{project.name}}' type='text'>
+        <label>Project Description:</label>
+        <input name='description' value='{{project.description}}' class='paragraph-input' type='text'>
+        <label>Project Status</label>
+        <span>
+            <input name='status' id='status-slider' value='{{project.status}}' type='range' min='0' max='1' step='.01'>
+            <output id='status-value' for='status-slider'>{{project.status}}</output>
+        </span>
+        <br>
+        <span>
+            <button name='save-action' value='save' type='submit'>Save</button>
+            <button name='save-action' value='cancel' type='submit'>Cancel</button>
+        </span>
+
+    </form>
+
+    <script>
+        const rangeInput = document.getElementById('status-slider');
+        const rangeOutput = document.getElementById('status-value');
+
+        // Update the output when the slider is moved
+        rangeInput.addEventListener('input', () => {
+            rangeOutput.textContent = rangeInput.value;
+        });
+
+        // Set initial value in case JavaScript loads after HTML
+        rangeOutput.textContent = rangeInput.value;
+    </script>
+
+    <!-- This is the footer that will be present in every page-->
+    {% include 'blocks/footer.html' %}    
+</body>
+</html>

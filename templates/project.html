@@ -2,11 +2,18 @@
 
 <html>
 {% include 'blocks/head.html' %}
+{% include "layout.html" %}
 <body>
     <!--This is the header that will be present in every page-->
     {% include 'blocks/header.html' %}    
 
     <h1> {{ project.name }} </h1>
+    {% if is_owner %}
+        <form action='{{ url_for('main.edit_project', pid=project.pid) }}'>
+            <!-- <input type='hidden', name='pid', value={{project.pid}}> -->
+            <input type='submit', value='Edit Project'>
+        </form>
+    {% endif %}
     <img src="/static/images/WWU.jpg" width="500px" height="250px">
     <br>
     <a> {{project.description}}</a>
