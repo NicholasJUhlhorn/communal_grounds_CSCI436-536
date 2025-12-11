@@ -21,8 +21,15 @@
             <output id='status-value' for='status-slider'>{{project.status}}</output>
         </span>
         <br>
+
+        <span>
+            <button name='save-action' value='save' type='submit'>Save</button>
+            <button name='save-action' value='cancel' type='submit'>Cancel</button>
+        </span>
+
+    </form>
         
-        {% for member in project.members %}
+    {% for member in project.members %}
         <li class='member-card'>
             <form action='{{ url_for('main.remove_member') }}' method="POST">
             {{ member.member.username }} - {{ member.role }}
@@ -36,14 +43,7 @@
             </form>
         </li>
     {% endfor %}
-        
-        <span>
-            <button name='save-action' value='save' type='submit'>Save</button>
-            <button name='save-action' value='cancel' type='submit'>Cancel</button>
-        </span>
-
-    </form>
-
+    
     <script>
         const rangeInput = document.getElementById('status-slider');
         const rangeOutput = document.getElementById('status-value');
