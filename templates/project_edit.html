@@ -21,6 +21,22 @@
             <output id='status-value' for='status-slider'>{{project.status}}</output>
         </span>
         <br>
+        
+        {% for member in project.members %}
+        <li class='member-card'>
+            <form action='{{ url_for('main.remove_member') }}' method="POST">
+            {{ member.member.username }} - {{ member.role }}
+            {% if member.role != 'OWNER' %}
+                    <input type="hidden" name="pid" value="{{ project.pid }}">
+                    <input type="hidden" name="uid" value="{{ member.uid }}">
+                    <div>
+                        <input type='submit', value='Remove'>
+                    </div>
+            {% endif %}
+            </form>
+        </li>
+    {% endfor %}
+        
         <span>
             <button name='save-action' value='save' type='submit'>Save</button>
             <button name='save-action' value='cancel' type='submit'>Cancel</button>
