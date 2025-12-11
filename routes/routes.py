@@ -198,6 +198,11 @@ def project_application(pid):
         flash("Please log in first.", 'warning')
         return redirect(url_for('main.login'))
 
+    if not uid:
+        flash("Please log in first.", 'warning')
+        return redirect(url_for('main.login'))
+
+
     project = None
     try:
         project = project_service.get_project_with_related_data(pid) 
