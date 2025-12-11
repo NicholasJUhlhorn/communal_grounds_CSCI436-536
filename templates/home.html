@@ -31,7 +31,14 @@
                     <button type="submit">Apply</button>
                 </form>
                 <br>
+            <a>
+            {% for reaction in project.reactions %} 
+            *
+            {% endfor %}
+            </a>
+            
             </li>
+
             {% endfor %}
         </ul>
     </div>
