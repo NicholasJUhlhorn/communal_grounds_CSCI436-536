@@ -22,6 +22,40 @@ def create_new_user(email: str, username: str, password_hash: str) -> User:
     db.session.commit()
     return new_user
 
+def change_username(uid: int, new_username: str):
+    """Updates a user's username"""
+
+    user = db.session.execute(
+        db.select(User).where(
+            (User.uid == uid)
+        )
+    ).scalar_one_or_none()
+
+    if not user:
+        raise ValueError("User not found")
+
+    user.username = new_username
+
+    db.session.commit()
+    return user
+
+def change_user_password(uid: int, new_hashed_password: str):
+    """Updates a user's password hash"""
+
+    user = db.session.execute(
+        db.select(User).where(
+            (User.uid == uid)
+        )
+    ).scalar_one_or_none()
+
+    if not user:
+        raise ValueError("User not found")
+
+    user.hashed_password = new_hashed_password
+
+    db.session.commit()
+    return user
+
 # --- READ OPERATIONS ---
 
 def get_user_by_id(user_id: int) -> User:

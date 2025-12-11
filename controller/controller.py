@@ -25,23 +25,6 @@ def change_user_email(uid: int, new_email: str):
     db.session.commit()
     return user
 
-def change_user_password(uid: int, new_hashed_password: str):
-    """Updates a user's password hash"""
-
-    user = db.session.execute(
-        db.select(User).where(
-            (User.uid == uid)
-        )
-    ).scalar_one_or_none()
-
-    if not user:
-        raise ValueError("User not found")
-
-    user.hashed_password = new_hashed_password
-
-    db.session.commit()
-    return user
-
 def change_project_description(pid: int, new_description: str):
     """Updates a project's description"""
 
@@ -117,6 +100,23 @@ def handle_account_creation(form):
     """
     hashed_password = generate_password_hash(form.get("password"))
     return user_service.create_new_user(form.get("email"), form.get("username"), hashed_password)
+
+def handle_update_username(uid: int, form):
+    '''
+    Given a uid and an input form, handles updating a user's username.
+    form is expected to have an attribute form.new_username
+    '''
+    new_username = form.get("new_username")
+    return user_service.change_username(uid, new_username)
+
+def handle_update_password(uid: int, form):
+    '''
+    Given a uid and an input form, handles updating a user's password.
+    form is expected to have an attribute form.new_password
+    '''
+    new_password = form.get("new_password")
+    new_hashed_password = generate_password_hash(new_password)
+    return user_service.change_user_password(uid, new_hashed_password)
 
 def get_available_projects():
     '''

@@ -134,6 +134,26 @@ def edit_project(pid):
 def create_project():
     return render_template('project_creation.html')
 
+@main_bp.route("/submit_update_username", methods=['POST'])
+def submit_update_username():
+    uid = session.get('current_uid')
+    result = controller.handle_update_username(uid,request.form)
+    if result:
+        return redirect(url_for('main.profile'))
+    else:
+        print(f'Error updating username for user {uid}', flush=True)
+        return render_template('something_went_wrong.html')
+
+@main_bp.route("/submit_update_password", methods=['POST'])
+def submit_update_password():
+    uid = session.get('current_uid')
+    result = controller.handle_update_password(uid,request.form)
+    if result:
+        return redirect(url_for('main.profile'))
+    else:
+        print(f'Error updating password for user {uid}', flush=True)
+        return render_template('something_went_wrong.html')
+
 @main_bp.route("/addmember", methods=['POST'])
 def add_member():
     pid = request.form.get('pid')
