@@ -172,6 +172,23 @@ def add_member():
         print(f'Error adding member: {e}', flush=True)
         return render_template('something_went_wrong.html')
 
+@main_bp.route("/remove_member", methods=['POST'])
+def remove_member():
+    pid = request.form.get('pid')
+    uid = request.form.get('uid')
+
+    if not pid:
+        flash("Please log in first.", 'warning')
+        return redirect(url_for('main.login'))
+
+    if pid and uid:
+        selected_project = Project.query.filter_by(pid=pid).first()
+        controller.handle_remove_member(pid,uid)
+        return render_template('project_edit.html', project=selected_project)
+    else:
+        print(f'Error removing member: {e}', flush=True)
+        return render_template('something_went_wrong.html')
+
 @main_bp.route("/project_application/<pid>", methods=['GET', 'POST'])
 def project_application(pid):
     # Make sure the session has a logged user first.
@@ -259,4 +276,5 @@ def submit_login():
 
     session['current_uid'] = uid
     return redirect(url_for('main.my_projects'))
+
 
