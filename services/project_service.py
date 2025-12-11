@@ -75,6 +75,21 @@ def add_project_member(pid: int, uid: int, role: str = 'VIEWER') -> ProjectMembe
     db.session.commit()
     return member
 
+def remove_project_member(pid: int, uid: int) -> None:
+    """Removes a user from a project."""
+    # Check if the membership exists
+    member = db.session.execute(
+        db.select(ProjectMember).where(
+            (ProjectMember.pid == pid) & (ProjectMember.uid == uid)
+        )
+    ).scalar_one_or_none()
+
+    if not member:
+        raise ValueError("User is not a member of this project.")
+
+    db.session.delete(member)
+    db.session.commit()
+
 def update_project_member(pid: int, uid: int, role: str) -> ProjectMember:
     """Update a user in a project with a new role, adds user if they are not present on the project already"""
     existing_member = db.session.execute(

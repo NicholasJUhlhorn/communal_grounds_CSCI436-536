@@ -118,6 +118,12 @@ def handle_update_password(uid: int, form):
     new_hashed_password = generate_password_hash(new_password)
     return user_service.change_user_password(uid, new_hashed_password)
 
+def handle_remove_member(pid: int, uid: int):
+    '''
+    Handles removing user with given uid from the project with the given pid
+    '''
+    return project_service.remove_project_member(pid,uid)
+
 def get_available_projects():
     '''
     Retrieves all PUBLISHED projects which the current user
